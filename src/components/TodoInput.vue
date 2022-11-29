@@ -46,6 +46,7 @@ export default {
 input:focus {
   outline: none;
 }
+
 .inputBox {
   background: white;
   height: 50px;
