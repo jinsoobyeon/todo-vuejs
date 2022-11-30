@@ -30,16 +30,16 @@ export default {
       xmlHttpRequest.open("DELETE", "http://localhost:8090/todo/delete");
       xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
       xmlHttpRequest.onload = event => {
-        console.log(event.target.response);
+        if (JSON.parse(event.target.response) === 1) {
+          this.todoItems.splice(
+            this.todoItems.findIndex(function(element) {
+              return element.id === todoItem.id;
+            }),
+            1
+          );
+        }
       };
       xmlHttpRequest.send(JSON.stringify(todoItem));
-
-      this.todoItems.splice(
-        this.todoItems.findIndex(function(element) {
-          return element.id === todoItem.id;
-        }),
-        1
-      );
     }
   },
   created() {
