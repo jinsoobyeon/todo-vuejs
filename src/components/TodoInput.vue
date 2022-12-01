@@ -22,16 +22,8 @@ export default {
   methods: {
     addTodo() {
       if (this.newTodoItem !== "") {
-        var xmlHttpRequest = new XMLHttpRequest();
         var value = this.newTodoItem && this.newTodoItem.trim();
-
-        xmlHttpRequest.open("POST", "http://localhost:8090/todo/create");
-        xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
-        xmlHttpRequest.onload = event => {
-          console.log(event.target.response);
-        };
-        xmlHttpRequest.send(JSON.stringify({ todo: value }));
-
+        this.$emit("addTodo", value);
         this.clearInput();
       }
     },

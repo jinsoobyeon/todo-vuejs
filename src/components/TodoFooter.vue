@@ -8,13 +8,7 @@
 export default {
   methods: {
     clearTodo() {
-      var xmlHttpRequest = new XMLHttpRequest();
-
-      xmlHttpRequest.open("DELETE", "http://localhost:8090/todo/deleteAll");
-      xmlHttpRequest.onload = event => {
-        console.log(event.target.response);
-      };
-      xmlHttpRequest.send();
+      this.$emit("removeAll");
     }
   }
 };

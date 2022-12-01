@@ -2,7 +2,7 @@
   <section>
     <ul>
       <li
-        v-for="todoItem in todoItems"
+        v-for="todoItem in propsdata"
         v-bind:key="todoItem['id']"
         class="shadow"
       >
@@ -18,42 +18,11 @@
 
 <script>
 export default {
-  data() {
-    return {
-      todoItems: []
-    };
-  },
+  props: ["propsdata"],
   methods: {
     removeTodo(todoItem) {
-      var xmlHttpRequest = new XMLHttpRequest();
-
-      xmlHttpRequest.open("DELETE", "http://localhost:8090/todo/delete");
-      xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
-      xmlHttpRequest.onload = event => {
-        if (JSON.parse(event.target.response) === 1) {
-          this.todoItems.splice(
-            this.todoItems.findIndex(function(element) {
-              return element.id === todoItem.id;
-            }),
-            1
-          );
-        }
-      };
-      xmlHttpRequest.send(JSON.stringify(todoItem));
+      this.$emit("removeTodo", todoItem);
     }
-  },
-  created() {
-    var xmlHttpRequest = new XMLHttpRequest();
-
-    xmlHttpRequest.open("GET", "http://localhost:8090/todo/");
-    xmlHttpRequest.onload = event => {
-      if (JSON.parse(event.target.response).length > 0) {
-        for (var i = 0; i < JSON.parse(event.target.response).length; i++) {
-          this.todoItems.push(JSON.parse(event.target.response)[i]);
-        }
-      }
-    };
-    xmlHttpRequest.send();
   }
 };
 </script>
