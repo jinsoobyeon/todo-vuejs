@@ -20,7 +20,17 @@ export default {
     };
   },
   created() {
-    this.readTodos();
+    var xmlHttpRequest = new XMLHttpRequest();
+
+    xmlHttpRequest.open("GET", "http://localhost:8090/todo/");
+    xmlHttpRequest.onload = event => {
+      if (JSON.parse(event.target.response).length > 0) {
+        for (var i = 0; i < JSON.parse(event.target.response).length; i++) {
+          this.todoItems.push(JSON.parse(event.target.response)[i]);
+        }
+      }
+    };
+    xmlHttpRequest.send();
   },
   methods: {
     addTodo(todoItem) {
@@ -29,8 +39,11 @@ export default {
       xmlHttpRequest.open("POST", "http://localhost:8090/todo/create");
       xmlHttpRequest.setRequestHeader("Content-Type", "application/json");
       xmlHttpRequest.onload = event => {
-        if (JSON.parse(event.target.response)) {
-          this.readTodos();
+        if (
+          JSON.parse(event.target.response).id !== 0 &&
+          JSON.parse(event.target.response).todo !== null
+        ) {
+          this.todoItems.push(JSON.parse(event.target.response));
         }
       };
       xmlHttpRequest.send(JSON.stringify({ todo: todoItem }));
@@ -62,21 +75,6 @@ export default {
         }
       };
       xmlHttpRequest.send(JSON.stringify(todoItem));
-    },
-    readTodos() {
-      var xmlHttpRequest = new XMLHttpRequest();
-
-      this.todoItems = [];
-
-      xmlHttpRequest.open("GET", "http://localhost:8090/todo/");
-      xmlHttpRequest.onload = event => {
-        if (JSON.parse(event.target.response).length > 0) {
-          for (var i = 0; i < JSON.parse(event.target.response).length; i++) {
-            this.todoItems.push(JSON.parse(event.target.response)[i]);
-          }
-        }
-      };
-      xmlHttpRequest.send();
     }
   },
   components: {
@@ -102,6 +100,6 @@ button {
 }
 
 .shadow {
-  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.03);
 }
 </style>
